@@ -10,10 +10,10 @@ require_once("config/routes.php");
 $router = new Router();
 $router = $router->router();
 
-
+// Main routes
 switch ($router['path']) {
-  case '/home':
-    controller('users');
+  case '/':
+    controller('index');
     break;
 
   default:
