@@ -16,7 +16,8 @@ return [
       'password' => env('DB_PASSWORD', 'password'),
       'fetch_obj' => true,
       'options' => [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
+        PDO::ATTR_TIMEOUT => 60 * 5 // 5 minutes
       ]
     ]
   ]
