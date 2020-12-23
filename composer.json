@@ -1,5 +1,16 @@
 {
+  "authors": [
+    {
+      "name": "Sameh A. Elalfi",
+      "email": "sameh.elalfi.mail@gmail.com"
+    }
+  ],
   "autoload": {
-    "classmap": ["./core"]
+    "files": [
+      "./core/helpers.php"
+    ],
+    "classmap": [
+      "./core"
+    ]
   }
 }
