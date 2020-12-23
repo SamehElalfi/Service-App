@@ -10,56 +10,96 @@ class Request
   }
 
   /**
-   * Convert the query string into associated array
-   * ['param'=>'string', 'name'=>'another-string']
-   * 
-   * @param $query(str): the full string of the http query
+   * Parse the request into an array 
    * 
    * @return array
    */
-  protected function split_query_string($query): array
-  {
-    $params = array();
-
-    // Split the query string into array
-    $query = explode('&', $query);
-
-    // Make this array dictionary ($key and $value)
-    foreach ($query as $value) {
-      $pair = explode('=', $value);
-      $params[$pair[0]] = implode('=', array_slice($pair, 1));
-    }
-
-    return $params;
-  }
-
-  /**
-   * 
-   */
   protected function prepare_request()
   {
-    $r = explode('?', $_SERVER['REQUEST_URI']);
     $request = array();
 
     // URI (e.g. /public/index.php?param=string&name=another-string)
     $request['uri'] = $_SERVER['REQUEST_URI'];
 
-    $request['protocol'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
-    $request['host'] = $_SERVER['HTTP_HOST'];
-    $request['path'] = $r[0];
+    $auth = $this->make_request_auth();
 
-    // Full URL (e.g. https://localhost/public/index.php?param=string&name=another-string)
-    $request['full_url'] = $request['protocol'] . "://$request[host]$request[uri]";
+    // Full URL
+    // e.g. https://username:password@localhost:8080/public/index.php?param=string&name=another-string#some-fragment
+    $request['full_url'] = $_SERVER['REQUEST_SCHEME'] . '://' .
+      $request['full_auth'] . $_SERVER['HTTP_HOST'] . $request['uri'];
 
+    $parsed_url = $this->parse_request_url($request['full_url']);
 
-    // if there is query string
-    if (isset($r[1])) {
-      // Full Query (e.g. ?param=string&name=another-string)
-      $request['full_query'] = "?" . $r[1];
+    $request = array_merge($request, $auth, $parsed_url);
 
-      // Queries (e.g. ['param'=>'string', 'name'=>'another-string'])
-      $request['queries'] = $this->split_query_string($r[1]);
+    return $request;
+  }
+
+  /**
+   * Add username(string), password(string) and auth(bool) to 
+   * $request variable
+   * 
+   * @return array
+   */
+  protected function make_request_auth(): array
+  {
+    $request = [];
+    if (isset($_SERVER['PHP_AUTH_USER'])) {
+      $request['auth'] = true;
+      $request['username'] = $_SERVER['PHP_AUTH_USER'];
+      $request['password'] = $_SERVER['PHP_AUTH_PW'];
+      $request['full_auth'] = $request['username'] . ':' . $request['password'];
+    } else {
+      $request['auth'] = false;
+      $request['username'] = null;
+      $request['password'] = null;
+      $request['full_auth'] = null;
     }
+    return $request;
+  }
+
+  /**
+   * parse the url and add its components to $request
+   * 
+   * @param string $full_url the full link
+   * (e.g. https://username:password@localhost:8080/public/index.php?param=string&name=another-string#some-fragment)
+   * 
+   * @return array
+   */
+  protected function parse_request_url(String $full_url): array
+  {
+    $request = [];
+    $url = parse_url($full_url);
+
+    // HTTP | HTTPS
+    $request['protocol'] = $url['scheme'];
+
+    // Authentication username and password
+    $request['user'] = $url['user'];
+    $request['pass'] = $url['pass'];
+
+    // Domain Name (e.g localhost, www.google.com)
+    $request['host'] = $url['host'];
+
+    // Port (int) (e.g. 80, 8080)
+    $request['port'] = $url['port'];
+
+    // /public/index.php
+    $request['path'] = $url['path'];
+
+    // param=string&name=another-string
+    $request['query'] = $url['query'];
+
+    // Full Query (e.g. ?param=string&name=another-string)
+    // $request['full_query'] = "?" . $request['query'];
+
+    // some-fragment
+    $request['fragment'] = $url['fragment'];
+
+    // Queries (e.g. ['param'=>'string', 'name'=>'another-string'])
+    $request['get_parameters'] = $_GET;
+    $request['post_parameters'] = $_POST;
+
     return $request;
   }
 
@@ -71,6 +111,6 @@ class Request
    */
   public static function uri()
   {
-    return trim($_SERVER['REQUEST_URI'], '/');
+    return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
   }
 }

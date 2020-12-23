@@ -17,5 +17,7 @@ require_once CORE_DIR . '/Request.php';
 $router = new Router();
 
 $routes = require_once ROUTES_DIR . '/web.php';
-$uri = trim($_SERVER['REQUEST_URI'], '/');
-$router->direct(Request::uri());
+$request = new Request();
+
+var_dump($request->request);
+// $router->direct(Request::uri());
