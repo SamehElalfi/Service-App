@@ -13,6 +13,7 @@ define('CONFIG_DIR', BASE_DIR . '/config');
 
 define('CONTROLLERS_DIR', BASE_DIR . '/controllers');
 define('VIEWS_DIR', BASE_DIR . '/views');
+define('ROUTES_DIR', BASE_DIR . '/routes');
 
 define('DATABASE_DIR', BASE_DIR . '/database');
 define('MIGRATION_DIR', DATABASE_DIR . '/migrations');

@@ -12,8 +12,8 @@
  */
 function view($view_name): void
 {
-  $suffix = get_config('views.suffix');
-  $prefix = get_config('views.prefix');
+  $suffix = get_config('view.suffix');
+  $prefix = get_config('view.prefix');
   $path = VIEWS_DIR . '/pages/' . $prefix . $view_name . $suffix;
   if (!file_exists($path))
     abort(500);
