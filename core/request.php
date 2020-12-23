@@ -71,6 +71,9 @@ class Request
     $request = [];
     $url = parse_url($full_url);
 
+    // Request Method GET, POST ...
+    $request['method'] = $_SERVER['REQUEST_METHOD'];
+
     // HTTP | HTTPS
     $request['protocol'] = $url['scheme'];
 
@@ -86,6 +89,7 @@ class Request
 
     // /public/index.php
     $request['path'] = $url['path'];
+    $request['trimmed_path'] = trim($url['path'], '/');
 
     // param=string&name=another-string
     $request['query'] = $url['query'];
