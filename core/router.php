@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Core;
-
 class Router
 {
   /**
@@ -22,7 +20,7 @@ class Router
   public function get(String $route, String $controller): void
   {
     $target = $this->split_controller_method($controller);
-    if (!$this->add_route('GET', $route, $target['controller'], $target['method']))
+    if (!$this->define('GET', $route, $target['controller'], $target['method']))
       throw new \Exception("Can't add GET $route", 1);
   }
 
@@ -38,7 +36,7 @@ class Router
   public function post(String $route, String $controller): void
   {
     $target = $this->split_controller_method($controller);
-    if (!$this->add_route('POST', $route, $target['controller'], $target['method']))
+    if (!$this->define('POST', $route, $target['controller'], $target['method']))
       throw new \Exception("Can't add POST $route", 1);
   }
 
@@ -73,17 +71,21 @@ class Router
    * @param string $method the http method type
    * @param string $route the http route
    * @param string $controller the controller name
-   * @param string $controller the targeted method name
+   * @param string $targeted_method the targeted method name
    * 
    * @return bool
    */
-  protected function add_route(String $method, String $route, String $controller, String $controller_method): bool
+  protected function define(String $method, String $route, String $controller, String $targeted_method): bool
   {
+    // Prefix for all routes
+    $prefix = get_config('route.web.prefix');
+
     $data = array();
     $data["method"] = strtoupper($method);
-    $data["route"] = $route;
+    $data["route"] = trim($prefix . '/' . $route, '/');
     $data["controller"] = $controller;
-    $data["controller_method"] = $controller_method;
+    $data["targeted_method"] = $targeted_method;
+
 
     // Make sure the method is correct
     if (!in_array($method, ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']))
@@ -93,5 +95,16 @@ class Router
     $this->routes[$key] = $data;
 
     return true;
+  }
+
+  public function direct(String $uri, String $method = 'GET')
+  {
+    $key = $method . ' ' . $uri;
+    if (array_key_exists($key, $this->routes)) {
+      controller($this->routes[$key]['controller']);
+      return;
+    }
+    // print_r($this->routes);
+    throw new \Exception("No defined route for this URI({$uri})", 1);
   }
 }

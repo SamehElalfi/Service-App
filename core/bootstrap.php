@@ -8,12 +8,14 @@ require_once CORE_DIR . '/helpers/view.helper.php';
 require_once CORE_DIR . '/helpers/controller.helper.php';
 
 // include core files
-require_once 'database/Connection.php';
-require_once 'database/QueryBuilder.php';
+require_once CORE_DIR . '/database/Connection.php';
+require_once CORE_DIR . '/database/QueryBuilder.php';
 $query = new QueryBuilder(Connection::make());
 
-// $router = require_once("../routes/web.php");
-// $request = new \App\Core\Request();
+require_once CORE_DIR . '/Router.php';
+require_once CORE_DIR . '/Request.php';
+$router = new Router();
 
-// echo $router[$request->uri];
-// echo "hello test";
+$routes = require_once ROUTES_DIR . '/web.php';
+$uri = trim($_SERVER['REQUEST_URI'], '/');
+$router->direct(Request::uri());
