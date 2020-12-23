@@ -7,7 +7,10 @@ class Router
    * 
    * @var array
    */
-  protected $routes = array();
+  public $routes = [
+    'GET' => [],
+    'POST' => []
+  ];
 
   /**
    * Add new route with GET method
@@ -87,21 +90,21 @@ class Router
     $data["targeted_method"] = $targeted_method;
 
 
+
     // Make sure the method is correct
     if (!in_array($method, ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']))
       throw new \Exception("Invalid http method");
 
-    $key = $data['method'] . " " . $data['route'];
-    $this->routes[$key] = $data;
+    $this->routes[$data['method']] += [$data['route'] => $data['controller']];
 
     return true;
   }
 
   public function direct(String $uri, String $method = 'GET')
   {
-    $key = $method . ' ' . $uri;
-    if (array_key_exists($key, $this->routes)) {
-      controller($this->routes[$key]['controller']);
+    $method = strtoupper($method);
+    if (array_key_exists($uri, $this->routes[$method])) {
+      controller($this->routes[$method][$uri]);
       return;
     }
     // print_r($this->routes);

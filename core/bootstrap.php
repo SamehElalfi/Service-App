@@ -12,12 +12,16 @@ require_once CORE_DIR . '/database/Connection.php';
 require_once CORE_DIR . '/database/QueryBuilder.php';
 $query = new QueryBuilder(Connection::make());
 
-require_once CORE_DIR . '/Router.php';
+// Main Request CLass
 require_once CORE_DIR . '/Request.php';
-$router = new Router();
-
-$routes = require_once ROUTES_DIR . '/web.php';
 $request = new Request();
 
-var_dump($request->request);
+// Router Manager
+require_once CORE_DIR . '/Router.php';
+$router = new Router();
+
+// Include all routes
+$routes = require_once ROUTES_DIR . '/web.php';
+// var_dump($request->request['path']);
+$router->direct($request->request['trimmed_path'], $request->request['method']);
 // $router->direct(Request::uri());
