@@ -23,4 +23,5 @@ define('MODELS_DIR', DATABASE_DIR . '/models');
 /**
  * Include the core of the app and config files
  */
+require_once(BASE_DIR . "/vendor/autoload.php");
 $query = require_once(CORE_DIR . "/bootstrap.php");
