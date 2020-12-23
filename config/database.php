@@ -1,7 +1,23 @@
 <?php
 
-// Connect to database
-$connection = new mysqli(SERVER_NAME, DB_USER, DB_PASS, DB_NAME);
-if ($connection->connect_error) {
-  die("Can't connect to database.");
-}
+return [
+
+  /**
+   * Database Connection
+   */
+
+  'connection' => [
+    'mysql' => [
+      'driver' => 'mysql',
+      'host' => env('DB_HOST', 'db'),
+      'port' => env('DB_PORT', '3306'),
+      'database' => env('DB_DATABASE', 'serviceapp_db'),
+      'username' => env('DB_USERNAME', 'username'),
+      'password' => env('DB_PASSWORD', 'password'),
+      'fetch_obj' => true,
+      'options' => [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING
+      ]
+    ]
+  ]
+];
