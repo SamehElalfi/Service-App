@@ -1,7 +1,5 @@
 <?php
 
-namespace Core;
-
 class Request
 {
   public $request = [];
@@ -19,7 +17,7 @@ class Request
    * 
    * @return array
    */
-  private function split_query_string($query): array
+  protected function split_query_string($query): array
   {
     $params = array();
 
@@ -38,7 +36,7 @@ class Request
   /**
    * 
    */
-  public function prepare_request()
+  protected function prepare_request()
   {
     $r = explode('?', $_SERVER['REQUEST_URI']);
     $request = array();
@@ -63,5 +61,16 @@ class Request
       $request['queries'] = $this->split_query_string($r[1]);
     }
     return $request;
+  }
+
+
+  /**
+   * return the current URI without additional slashes /
+   * 
+   * @return string
+   */
+  public static function uri()
+  {
+    return trim($_SERVER['REQUEST_URI'], '/');
   }
 }
