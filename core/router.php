@@ -133,7 +133,7 @@ class Router
       abort(500, "Controller {$controller} not exists.");
     }
 
-    $controller = ucfirst($controller);
+    $controller = ucwords($controller);
     $controller = "\App\Controllers\\$controller";
 
     // Call method from class

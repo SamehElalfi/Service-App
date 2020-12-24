@@ -319,6 +319,9 @@ if (function_exists('apache_get_modules')) {
       <img class="mark" src="https://laravel.com/img/logomark.min.svg" alt="Laravel"><img class="type" src="https://laravel.com/img/logotype.min.svg" alt="Laravel">
     </a>
 
+    <p>This Project use some dependencies as Laravel. So that, If Laravel can work on your server then this project can do as well.</p>
+    <br>
+
     <form action="?" method="get">
       <select name="v" onchange="this.form.submit()">
         <option value="8.0" <?php echo ($laravelVersion === '8.0') ? 'selected' : '' ?>>Laravel 8.0 - Latest</option>
