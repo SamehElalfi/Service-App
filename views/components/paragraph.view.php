@@ -1,0 +1,1 @@
+<p>Some text that included as component</p>

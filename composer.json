@@ -6,11 +6,11 @@
     }
   ],
   "autoload": {
-    "files": [
-      "./core/helpers.php"
-    ],
     "classmap": [
       "./core"
+    ],
+    "files": [
+      "./core/helpers.php"
     ]
   }
 }

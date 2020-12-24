@@ -4,8 +4,8 @@ class Index
 {
   public function index()
   {
-    // view('index');
-    echo "Hello from new class";
+    view('index');
+    // echo "Hello from new class";
   }
 
   public function new()

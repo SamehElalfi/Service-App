@@ -7,21 +7,20 @@ if (!function_exists('abort')) {
    *
    * @param  int  $code the error number
    * @param  string  $message
-   * @param  array  $headers
    * 
    * if the error page not exist, returns string "Error 500 ..."
    * 
    * @return string|void
    */
-  function abort($code)
+  function abort($code, String $message = "")
   {
     $path = VIEWS_DIR . '/errors/' . $code . '.php';
 
     if (file_exists($path)) {
-      require_once($path);
-    } else {
-      return "Error 500 - Server Side Error";
+      die(require($path));
     }
+
+    die("Error 500 - " . $message . " & page for error 500 not exists. Please, add it first.");
   }
 }
 
@@ -30,24 +29,60 @@ if (!function_exists('view')) {
   /**
    * include view file from ./views/pages/
    * 
-   * @param $view_name(str): the file name in ./views/pages/
+   * @param string $view the file name in ./views/pages/
    * without .php file extension
+   * 
+   * @param array $data optional array of variable used inside
+   * the view file
    * 
    * if file not exists return 500 error page
    * 
    * @return void
    */
-  function view($view_name): void
+  function view($view, $data = []): void
   {
+    extract($data);
+
     $suffix = get_config('view.suffix');
     $prefix = get_config('view.prefix');
-    $path = VIEWS_DIR . '/pages/' . $prefix . $view_name . $suffix;
+    $path = VIEWS_DIR . '/pages/' . $prefix . $view . $suffix;
     if (!file_exists($path))
-      abort(500);
+      abort(500, "View {$view} not exists");
     else
       require_once($path);
   }
 }
+
+
+
+if (!function_exists('component')) {
+  /**
+   * include view file from ./views/pages/
+   * 
+   * @param string $component the file name in ./views/pages/
+   * without .php file extension
+   * 
+   * @param array $data optional array of variable used inside
+   * the view file
+   * 
+   * if file not exists return 500 error page
+   * 
+   * @return void
+   */
+  function component($component, $data = []): void
+  {
+    extract($data);
+
+    $suffix = get_config('view.suffix');
+    $prefix = get_config('view.prefix');
+    $path = VIEWS_DIR . '/components/' . $prefix . $component . $suffix;
+    if (!file_exists($path))
+      abort(500, "component {$component} not exists.");
+    else
+      require_once($path);
+  }
+}
+
 
 
 if (!function_exists('get_config')) {
@@ -74,28 +109,6 @@ if (!function_exists('get_config')) {
     }
 
     return $value;
-  }
-}
-
-
-if (!function_exists('controller')) {
-  /**
-   * include controller 
-   * 
-   * @param $controller_name(str): the name of the controller in ./controllers/
-   * without .controller.php file extension
-   * 
-   * if file not exists return error 500
-   * 
-   * @return void
-   */
-  function controller($controller_name): void
-  {
-    $path = CONTROLLERS_DIR . '/' . $controller_name . '.controller.php';
-    if (!file_exists($path))
-      abort(500);
-    else
-      require_once($path);
   }
 }
 

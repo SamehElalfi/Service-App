@@ -9,7 +9,7 @@
 
 <body>
   <? component("paragraph") ?>
-  Some text to make sure this page is working correctly.
+  Users view
 </body>
 
 </html>
