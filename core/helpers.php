@@ -10,17 +10,18 @@ if (!function_exists('abort')) {
    * 
    * if the error page not exist, returns string "Error 500 ..."
    * 
-   * @return string|void
+   * @return void
    */
-  function abort($code, String $message = "")
+  function abort($error_code, String $message = "")
   {
-    $path = VIEWS_DIR . '/errors/' . $code . '.php';
+    $path = VIEWS_DIR . '/errors/' . $error_code . '.php';
 
     if (file_exists($path)) {
       die(require($path));
     }
 
-    die("Error 500 - " . $message . " & page for error 500 not exists. Please, add it first.");
+    throw new \Exception("Error 500 - " . $message .
+      " & page for error 500 not exists. Please, add it first.", 1);
   }
 }
 

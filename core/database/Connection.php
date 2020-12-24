@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Core\Database;
+
 class Connection
 {
   public static function make()
@@ -13,13 +16,13 @@ class Connection
       $password = $config['password'];
       $options = $config['options'];
 
-      return new PDO(
+      return new \PDO(
         "{$driver}:host={$host}:{$port};{$database}",
         $username,
         $password,
         $options
       );
-    } catch (PDOException $e) {
+    } catch (\PDOException $e) {
       die("Could not to connect: " .  $e->getMessage());
     }
   }

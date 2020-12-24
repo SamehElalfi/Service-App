@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use App\Core\Database\{Connection, QueryBuilder};
+
 // include core files
 $query = new QueryBuilder(Connection::make());
 

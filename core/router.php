@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use stdClass;
+
 class Router
 {
   /**
@@ -108,8 +112,7 @@ class Router
       $this->call_action(...$target);
       return;
     }
-    // print_r($this->routes);
-    throw new \Exception("No defined route for this URI({$uri})", 1);
+    abort(404, "Are you lost?");
   }
 
 
@@ -123,17 +126,17 @@ class Router
    * 
    * @return void
    */
-  protected function call_action(String $controller, String $action = "index")
+  protected function call_action(String $controller, String $action = "index"): void
   {
     $path = CONTROLLERS_DIR . '/' . $controller . '.controller.php';
     if (!file_exists($path)) {
-      abort(500);
+      abort(500, "Controller {$controller} not exists.");
     }
 
-    require_once($path);
-    return (new $controller)->$action();
+    $controller = ucfirst($controller);
+    $controller = "\App\Controllers\\$controller";
 
-    die($controller);
-    // return require_once($path);
+    // Call method from class
+    (new $controller)->$action();
   }
 }

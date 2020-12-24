@@ -1,0 +1,1 @@
+<? component('error-page', compact('error_code', 'message')) ?>

@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 class Users
 {
   public function home()
