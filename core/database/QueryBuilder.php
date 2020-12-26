@@ -22,6 +22,6 @@ class QueryBuilder
   {
     $statement = $this->pdo->prepare("SELECT * FROM {$table}");
     $statement->execute();
-    return $statement->fetchAll(PDO::FETCH_CLASS);
+    return $statement->fetchAll(\PDO::FETCH_CLASS);
   }
 }

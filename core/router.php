@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-use stdClass;
+use App\Core\Request;
 
 class Router
 {
@@ -89,11 +89,10 @@ class Router
 
     $data = array();
     $data["method"] = strtoupper($method);
-    $data["route"] = trim($prefix . '/' . $route, '/');
+    $data["route"] = $this->route_to_regex($prefix . '/' . $route);
+    // die(var_dump("{$data["route"]}"));
     $data["controller"] = $controller;
     $data["action"] = $action;
-
-
 
     // Make sure the method is correct
     if (!in_array($method, ['GET', 'POST', 'DELETE', 'PUT', 'PATCH']))
@@ -104,29 +103,54 @@ class Router
     return true;
   }
 
+  /**
+   * Direct the request to the correct route
+   * 
+   * @param string $uri The request uri
+   * @param string $request_type the method used to make the request GET,POST...
+   * 
+   */
   public function direct(String $uri, String $request_type)
   {
     $request_type = strtoupper($request_type);
-    if (array_key_exists($uri, $this->routes[$request_type])) {
-      $target  = explode('@', $this->routes[$request_type][$uri]);
-      $this->call_action(...$target);
-      return;
+    $patters = array_keys($this->routes[$request_type]);
+
+    if ($uri == '') {
+      $pattern = $this->route_to_regex($uri);
+      $target  = explode('@', $this->routes[$request_type][$pattern]);
+      $controller = $target[0];
+      $action = $target[1];
+      $this->call_action($controller, $action, []);
+    } else {
+      foreach ($patters as $pattern) {
+        if ($pattern == '/$/') continue;
+        $same = preg_match($pattern, $uri, $matches);
+        if ($same) {
+          $target  = explode('@', $this->routes[$request_type][$pattern]);
+          $controller = $target[0];
+          $action = $target[1];
+          $matches = $this->remove_integer_indexes($matches);
+          $this->call_action($controller, $action, $matches);
+          return;
+        }
+      }
+      abort(404, "Are you lost?");
     }
-    abort(404, "Are you lost?");
   }
 
 
   /**
    * include controller 
    * 
-   * @param $controller(str): the name of the controller in ./controllers/
+   * @param string $controller the name of the controller in ./controllers/
    * without .controller.php file extension
-   * 
+   * @param string $action the method name
+   * @param array $params all parameters that passed to the method
    * if file not exists return error 500
    * 
    * @return void
    */
-  protected function call_action(String $controller, String $action = "index"): void
+  protected function call_action(String $controller, String $action = "index", $params = []): void
   {
     $path = CONTROLLERS_DIR . '/' . $controller . '.controller.php';
     if (!file_exists($path)) {
@@ -137,6 +161,57 @@ class Router
     $controller = "\App\Controllers\\$controller";
 
     // Call method from class
-    (new $controller)->$action();
+    (new $controller)->$action($params);
+  }
+
+  /**
+   * Convert the route into regex to match the request uri
+   * 
+   * @param string $route
+   * 
+   * @return string
+   */
+  protected function route_to_regex(String $route): String
+  {
+    // Remove additional slashes from the beginning and the end
+    $route = trim($route, '/');
+
+    // convert this route to regex pattern
+    $pattern = preg_replace("/({.*?})/", "(..*?)", $route);
+
+    // replace slashes / with \/
+    $pattern = '/' . str_replace('/', '\/', $pattern) . '$/';
+
+    // Convert the parameters to regex group names
+    preg_match($pattern, $route, $matches);
+    $m = array_slice($matches, 1);
+
+    foreach ($m as $route_param) {
+      $route_param_without_brackets = substr($route_param, 1, -1);
+
+      $replace = '(?P<' . $route_param_without_brackets . '>..*?)';
+
+      // replace the route parameters to regex patterns
+      $route = str_replace($route_param, $replace, $route);
+    }
+
+    // replace slashes / with \/
+    return '/' . str_replace('/', '\/', $route) . '$/';
+  }
+
+  /**
+   * remove duplicated elements from merged arrays (associative+indexed)
+   * 
+   * @param array $arr
+   * 
+   * @return array
+   */
+  protected function remove_integer_indexes(array $arr)
+  {
+    $new_arr = [];
+    foreach ($arr as $key => $value) {
+      if (gettype($key) != "integer") $new_arr[$key] = $value;
+    }
+    return $new_arr;
   }
 }

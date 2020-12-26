@@ -20,5 +20,6 @@ return [
         PDO::ATTR_TIMEOUT => 60 * 5 // 5 minutes
       ]
     ]
-  ]
+  ],
+  'database_type' => strtolower(env('DB_TYPE', 'mysql'))
 ];
