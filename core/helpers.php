@@ -155,3 +155,64 @@ if (!function_exists('env')) {
     return $value;
   }
 }
+
+
+if (!function_exists('bcrypt')) {
+  /**
+   * Hash the given value against the bcrypt algorithm.
+   *
+   * @param  string  $value
+   * @param  array  $options
+   * @return string
+   */
+  function bcrypt($value, $options = [])
+  {
+    $hash = password_hash($value, PASSWORD_BCRYPT, [
+      'cost' => $options['rounds'] ?? 10,
+    ]);
+
+    if ($hash === false) {
+      throw new RuntimeException('Bcrypt hashing not supported.');
+    }
+
+    return $hash;
+  }
+}
+
+
+if (!function_exists('check_bcrypt')) {
+  /**
+   * Check the given plain value against a hash.
+   *
+   * @param  string  $value
+   * @param  string  $hashedValue
+   * @param  array  $options
+   * @return bool
+   */
+  function check_bcrypt($value, $hashedValue)
+  {
+    if (strlen($hashedValue) === 0) {
+      return false;
+    }
+
+    return password_verify($value, $hashedValue);
+  }
+}
+
+
+if (!function_exists('dd')) {
+  /**
+   * Check the given plain value against a hash.
+   *
+   * @param  mixed ...$vars
+   * @return bool
+   */
+  function dd(...$vars)
+  {
+    foreach ($vars as $arg) {
+      var_dump($arg);
+      echo "<br>";
+    }
+    exit(1);
+  }
+}
