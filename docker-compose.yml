@@ -1,0 +1,30 @@
+version: "3"
+services:
+  db:
+    image: mysql:latest
+    container_name: service_db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: serviceapp_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+    ports:
+      - 3333:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+  web:
+    build: .
+    container_name: service_app
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - 8080:80
+    environment:
+      DB_DATABASE: serviceapp_db
+      DB_USERNAME: admin
+      DB_PASSWORD: password
+      DB_HOST: db
+    depends_on:
+      - db
