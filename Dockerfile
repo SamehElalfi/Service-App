@@ -5,8 +5,9 @@ RUN apt-get update -y && apt-get upgrade -y
 RUN a2enmod rewrite
 RUN service apache2 restart
 
-# Install mysqli and mysql for PDO
+# Install mysqli, mysql for PDO and zip
 RUN docker-php-ext-install mysqli pdo_mysql exif pcntl bcmath
+RUN apt-get -y install zip unzip 
 
 # Install Git
 RUN apt-get update && \
