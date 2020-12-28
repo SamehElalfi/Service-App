@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Core\Request;
+use ICanBoogie\Inflector;
 
 class Router
 {
@@ -152,12 +153,15 @@ class Router
    */
   protected function call_action(String $controller, String $action = "index", $params = []): void
   {
-    $path = CONTROLLERS_DIR . '/' . $controller . '.controller.php';
+    $controller_path = $controller;
+    $path = CONTROLLERS_DIR . '/' . $controller_path . '.controller.php';
     if (!file_exists($path)) {
       abort(500, "Controller {$controller} not exists.");
     }
 
-    $controller = ucwords($controller);
+    $inflector = Inflector::get('en');
+    $controller = $inflector->titleize($controller);
+    $controller = str_replace('/', '\\', $controller);
     $controller = "\App\Controllers\\$controller";
 
     // Call method from class
