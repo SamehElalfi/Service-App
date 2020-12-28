@@ -4,8 +4,11 @@ namespace App\Core;
 
 use App\Core\Database\{Connection, QueryBuilder};
 
+session_start();
+
 // include core files
 $query = new QueryBuilder(Connection::make());
+
 
 // Main Request CLass
 $request = new Request();

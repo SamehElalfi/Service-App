@@ -80,7 +80,7 @@ if (!function_exists('component')) {
     if (!file_exists($path))
       abort(500, "component {$component} not exists.");
     else
-      require_once($path);
+      include($path);
   }
 }
 
@@ -97,7 +97,7 @@ if (!function_exists('get_config')) {
    */
   function get_config(String $key, $default = null)
   {
-    global $base_dir;
+    global $base_dir; // TODO: Remove this variable after check what it does
     $splitted_key = explode('.', $key);
     $value = include(CONFIG_DIR . '/' . $splitted_key[0] . '.php');
 
@@ -202,7 +202,7 @@ if (!function_exists('check_bcrypt')) {
 
 if (!function_exists('dd')) {
   /**
-   * Check the given plain value against a hash.
+   * Dump data and Die
    *
    * @param  mixed ...$vars
    * @return bool
@@ -214,5 +214,21 @@ if (!function_exists('dd')) {
       echo "<br>";
     }
     exit(1);
+  }
+}
+
+
+
+if (!function_exists('asset')) {
+  /**
+   * Return the asset path from public
+   *
+   * @param  string $path
+   * @return bool
+   */
+  function asset($path)
+  {
+    return $path;
+    return BASE_DIR . '/public/' . $path;
   }
 }

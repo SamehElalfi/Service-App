@@ -1,6 +1,6 @@
 RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
+RewriteCond %{REQUEST_FILENAME} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt|\.ttf|\.woff) [NC]
 RewriteRule ^(.+)$ index.php [QSA,L]
 php_flag display_errors 1
