@@ -76,6 +76,9 @@ class Request
     // Request Method GET, POST ...
     $request['method'] = $_SERVER['REQUEST_METHOD'];
 
+    // The previous URL
+    $request['referer'] = $_SERVER['HTTP_REFERER'];
+
     // HTTP | HTTPS
     $request['protocol'] = $url['scheme'];
 
@@ -103,8 +106,8 @@ class Request
     $request['fragment'] = $url['fragment'];
 
     // Queries (e.g. ['param'=>'string', 'name'=>'another-string'])
-    $request['get_parameters'] = $_GET;
-    $request['post_parameters'] = $_POST;
+    $request['get_params'] = $_GET;
+    $request['post_params'] = $_POST;
 
     return $request;
   }
@@ -118,5 +121,15 @@ class Request
   public static function uri()
   {
     return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+  }
+
+  public function back()
+  {
+    $previous_url = $this->request['referer'];
+    $this->redirect($previous_url);
+  }
+  public static function redirect(String $path)
+  {
+    header("Location: {$path}");
   }
 }
