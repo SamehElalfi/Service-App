@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class HealthCheck
+class HealthCheckController
 {
   public function index()
   {

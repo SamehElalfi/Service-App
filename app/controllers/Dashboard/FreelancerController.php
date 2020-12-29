@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
-use App\Models\User;
+// use App\Models\User;
 
-class Users
+class FreelancerController
 {
   public function home()
   {

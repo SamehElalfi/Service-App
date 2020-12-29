@@ -7,7 +7,7 @@ use App\Core\Request;
 use App\Models\User;
 use App\Core\Auth;
 
-class Login extends AuthController
+class LoginController extends AuthController
 {
   /**
    * Login Form

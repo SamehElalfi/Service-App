@@ -2,7 +2,8 @@
 
 return [
   'web' => [
-    'prefix' => ''
+    'prefix' => '',
+    'sufix' => '.view.php'
   ],
   'api' => [
     'prefix' => 'api'

@@ -6,7 +6,7 @@ use App\Core\Auth;
 use App\Core\Request;
 use App\Models\User;
 
-class Register extends AuthController
+class RegisterController extends AuthController
 {
   /**
    * Return the view of registration page if the no user logged in
