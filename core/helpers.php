@@ -211,7 +211,9 @@ if (!function_exists('dd')) {
   {
     foreach ($vars as $arg) {
       var_dump($arg);
-      echo "<br>";
+      if (count($vars) > 1) {
+        echo "<br>";
+      }
     }
     exit(1);
   }
