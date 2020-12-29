@@ -4,7 +4,7 @@ namespace App\Controllers\Dashboard;
 
 use App\Models\User;
 
-class UsersController
+class UserController extends DashboardController
 {
   public function index()
   {

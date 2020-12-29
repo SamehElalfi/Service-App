@@ -90,7 +90,6 @@ class Router
     $data = array();
     $data["method"] = strtoupper($method);
     $data["route"] = $this->route_to_regex($prefix . '/' . $route);
-    // die(var_dump("{$data["route"]}"));
     $data["controller"] = $controller;
     $data["action"] = $action;
 
@@ -159,7 +158,7 @@ class Router
     }
 
     $controller = str_replace('/', '\\', $controller);
-    $controller = "\App\Controllers\\$controller";
+    $controller = "\App\Controllers\\" . $controller;
 
     // Call method from class
     (new $controller)->$action($params);
