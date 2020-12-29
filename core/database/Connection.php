@@ -17,7 +17,7 @@ class Connection
       $options = $config['options'];
 
       return new \PDO(
-        "{$driver}:host={$host}:{$port};{$database}",
+        "{$driver}:host={$host}:{$port};dbname={$database}",
         $username,
         $password,
         $options
