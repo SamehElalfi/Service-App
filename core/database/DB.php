@@ -2,6 +2,7 @@
 
 namespace App\Core\Database;
 
+use App\Core\Database\Connection;
 use PDO;
 use PDOException;
 
@@ -19,11 +20,19 @@ class DB
     return count(array_filter(array_keys($array), 'is_string')) > 0;
   }
 
-  public function exec(String $query)
+  /**
+   * Execute query using PDO. If error occurred, then return 500 error
+   * with the Execution message
+   * 
+   * @return PDOStatement|false
+   */
+  public static function exec(String $query, array $bindings = [])
   {
+    $db = new static(Connection::make());
     try {
-      $statement = $this->pdo->prepare($query);
-      $statement->execute();
+      $statement = $db->pdo->prepare($query);
+      $statement->setFetchMode(PDO::FETCH_ASSOC);
+      $statement->execute($bindings);
       return $statement;
     } catch (PDOException $e) {
       abort(500, $e->getMessage());

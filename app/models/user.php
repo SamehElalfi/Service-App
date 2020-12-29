@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Core\Database\QueryBuilder;
+use App\Core\Database\Model;
 
-class User extends QueryBuilder
+class User extends Model
 {
-  // public $table_name = "users";
+  // public $table = "users";
 }
