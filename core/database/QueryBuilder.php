@@ -89,7 +89,7 @@ class QueryBuilder extends DB
     }
 
     $query = $this->makeSelect();
-    return $this->fetchAll($this->runSelect($query));
+    return $this->fetchAll($this->runQuery($query));
   }
 
   /**
@@ -109,13 +109,58 @@ class QueryBuilder extends DB
   }
 
   /**
+   * Creates SQL Query to insert data into table
+   * 
+   * @return string
+   */
+  protected function makeInsert()
+  {
+    $query = "INSERT INTO {$this->getTable()} ({$this->prepareColumns()}) VALUES (";
+
+    // assume that the developer wants to insert a complete row of values
+    // then we need to make '?' in the query as many as values passed 
+    // to the method since PDO doesn't accept array as a value
+    // So we can't do this: 
+    // $statement->execute("insert into users(name, email) 
+    // VALUES (?)" , ['my name', 'name@gmail.com'])
+    for ($i = 0; $i < count($this->columns); $i++) {
+      $query .= '?';
+      if ($i + 1 < count($this->columns)) {
+        $query .= ',';
+      }
+    }
+    $query .= ')';
+
+    return $query;
+  }
+
+
+  /**
+   * Creates SQL Query to delete data from table
+   * 
+   * @return string
+   */
+  protected function makeDelete()
+  {
+    $query = "DELETE FROM {$this->getTable()}";
+
+    // If there is one or more where statements
+    // So, developer can't delete all data by mistake
+    if ($this->prepareWheres()) {
+      $query .= $this->prepareWheres();
+    }
+
+    return $query;
+  }
+
+  /**
    * Run SQL SELECT statement and return the PDO statement
    * 
    * @param $query
    * 
    * @return PDOStatement|false
    */
-  protected function runSelect(String $query)
+  protected function runQuery(String $query)
   {
     return DB::exec($query, $this->getBindings());
   }
@@ -162,7 +207,7 @@ class QueryBuilder extends DB
     }
 
     $query = $this->makeSelect();
-    return $this->fetch($this->runSelect($query));
+    return $this->fetch($this->runQuery($query));
   }
 
   /**
@@ -221,6 +266,23 @@ class QueryBuilder extends DB
     }
   }
 
+  /**
+   * Add a biding to the model to be used in the PDO Executor
+   * 
+   * @param mixed $binding
+   * 
+   * @return void
+   */
+  protected function addBindings($binding)
+  {
+    if (is_array($binding)) {
+      foreach ($binding as $value) {
+        $this->bindings[] = $value;
+      }
+    } else {
+      $this->bindings[] = $binding;
+    }
+  }
   /**
    * Add new column to the selected columns
    * 

@@ -40,8 +40,19 @@ if (!function_exists('view')) {
    * 
    * @return void
    */
-  function view($view, $data = []): void
+  function view($view, $data = [], array $errors = []): void
   {
+
+    // TODO: Create a class for views with methods like "with, withErrors" ...
+
+    // Get Error message and store them in $errors
+    // Then remove all error message from the session 
+    // so we can add new error message
+    if (!is_null($_SESSION['redirect_message'])) {
+      $errors = array_merge($errors, $_SESSION['redirect_message']);
+      $_SESSION['redirect_message'] = null;
+    }
+
     extract($data);
 
     $suffix = get_config('view.suffix');
@@ -230,7 +241,7 @@ if (!function_exists('asset')) {
    */
   function asset($path)
   {
-    return $path;
-    return BASE_DIR . '/public/' . $path;
+    $path = trim($path, '/');
+    return '/' . $path;
   }
 }

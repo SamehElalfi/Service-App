@@ -1,24 +1,16 @@
-<?php
-require_once('functions.php');
-$title = "Manage Users";
-
-$result = mysqli_query($connection, "SELECT * FROM users");
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <?php include('components/head.php'); ?>
+  <?php component('dashboard/head', compact('title')); ?>
 </head>
 
 <body>
-  <?php include('components/navbar.php'); ?>
+  <?php component('dashboard/navbar'); ?>
   <div class="container">
     <div class="row">
 
-      <?php include('components/sidebar.php'); ?>
+      <?php component('dashboard/sidebar'); ?>
 
       <!-- Page Content -->
       <div class="col-md-9">
@@ -27,10 +19,10 @@ $result = mysqli_query($connection, "SELECT * FROM users");
           <div class="card-body">
             <table class="table table-striped custab">
               <thead>
-                <a href="create-user.php" class="btn btn-primary btn-xs pull-right mb-4"><b>+</b> Add new User</a>
+                <a href="/dashboard/users/create" class="btn btn-primary btn-xs pull-right mb-4"><b>+</b> Add new User</a>
                 <tr>
                   <th>ID</th>
-                  <th>Userame</th>
+                  <th>Name</th>
                   <th>Email</th>
                   <th>Role</th>
                   <th class="text-center">Action</th>
@@ -38,21 +30,23 @@ $result = mysqli_query($connection, "SELECT * FROM users");
               </thead>
               <tbody>
                 <?php
-                while ($user = mysqli_fetch_array($result)) {
+                foreach ($users as $user) :
                 ?>
                   <tr>
                     <td><?= $user['id'] ?></td>
-                    <td><?= $user['username'] ?></td>
+                    <td><a href="/dashboard/users/<?= $user['id'] ?>"><?= $user['first_name'] . ' ' . $user['last_name']  ?></a></td>
                     <td><?= $user['email'] ?></td>
-                    <td><?= $user['role'] == 1 ? "Admin" : "User" ?></td>
+                    <td>User</td>
                     <td class='text-center'>
-                      <a class='btn btn-info btn-xs' href='#'><span class='glyphicon glyphicon-edit'></span> Edit</a>
-                      <a href='delete-user.php?id=<?= $user['id'] ?>' class='btn btn-danger btn-xs'><span class='glyphicon glyphicon-remove'></span> Del</a>
+                      <a class='btn btn-info btn-xs' href='/dashboard/users/<?= $user['id'] ?>/edit'>
+                        <span class='glyphicon glyphicon-edit'></span> Edit
+                      </a>
+                      <a class='btn btn-danger btn-xs delete-btn' data-id="<?= $user['id'] ?>">
+                        <span class='glyphicon glyphicon-remove'></span> Del
+                      </a>
                     </td>
                   </tr>
-                <?php
-                }
-                ?>
+                <?php endforeach; ?>
               </tbody>
             </table>
           </div>
@@ -64,7 +58,7 @@ $result = mysqli_query($connection, "SELECT * FROM users");
   </div>
   <!-- End .container -->
 
-  <?php include('components/scripts.php'); ?>
+  <?php component('dashboard/scripts'); ?>
 </body>
 
 </html>

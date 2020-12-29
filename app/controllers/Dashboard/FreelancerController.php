@@ -13,4 +13,9 @@ class FreelancerController extends DashboardController
     // $pageTitle = 'Hello, Title!';
     // return view('users', compact('pageTitle'));
   }
+
+  public function create()
+  {
+    # code...
+  }
 }

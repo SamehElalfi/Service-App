@@ -13,7 +13,10 @@ class Router
    */
   public $routes = [
     'GET' => [],
-    'POST' => []
+    'POST' => [],
+    'PUT' => [],
+    'PATCH' => [],
+    'DELETE' => []
   ];
 
   /**
@@ -29,6 +32,53 @@ class Router
     $target = $this->split_controller_method($controller);
     if (!$this->define('GET', $route, $target['controller'], $target['method']))
       throw new \Exception("Can't add GET $route", 1);
+  }
+
+
+  /**
+   * Add new route with PUT method
+   * 
+   * @param string $route the route path
+   * @param string $controller the controller name and the the targeted method
+   * 
+   * @return void
+   */
+  public function put(String $route, String $controller): void
+  {
+    $target = $this->split_controller_method($controller);
+    if (!$this->define('PUT', $route, $target['controller'], $target['method']))
+      throw new \Exception("Can't add PUT $route", 1);
+  }
+
+
+  /**
+   * Add new route with PATCH method
+   * 
+   * @param string $route the route path
+   * @param string $controller the controller name and the the targeted method
+   * 
+   * @return void
+   */
+  public function patch(String $route, String $controller): void
+  {
+    $target = $this->split_controller_method($controller);
+    if (!$this->define('PATCH', $route, $target['controller'], $target['method']))
+      throw new \Exception("Can't add PATCH $route", 1);
+  }
+
+  /**
+   * Add new route with DELETE method
+   * 
+   * @param string $route the route path
+   * @param string $controller the controller name and the the targeted method
+   * 
+   * @return void
+   */
+  public function delete(String $route, String $controller): void
+  {
+    $target = $this->split_controller_method($controller);
+    if (!$this->define('DELETE', $route, $target['controller'], $target['method']))
+      throw new \Exception("Can't add DELETE $route", 1);
   }
 
 

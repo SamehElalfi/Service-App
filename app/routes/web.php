@@ -23,6 +23,10 @@ $router->get('/dashboard', 'Dashboard/DashboardController@index');
 // Users route
 $router->get('/dashboard/users', 'Dashboard/UserController@index');
 $router->get('/dashboard/users/create', 'Dashboard/UserController@create');
+$router->post('/dashboard/users', 'Dashboard/UserController@store');
+$router->get('/dashboard/users/{id}/edit', 'Dashboard/UserController@edit');
+$router->get('/dashboard/users/{id}', 'Dashboard/UserController@show');
+$router->delete('/dashboard/users/{id}', 'Dashboard/UserController@destroy');
 
 // Freelancer Route
 $router->get('/dashboard/freelancers', 'Dashboard/FreelancerController@create');

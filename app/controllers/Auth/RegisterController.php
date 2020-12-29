@@ -28,10 +28,11 @@ class RegisterController extends AuthController
     $params = $request->request['post_params'];
     $params['password'] = bcrypt($params['password']);
 
-    $user = new User();
-    $user_inserted = $user->insert($params);
+    dd($params);
+    // $user = new User();
+    // $user_inserted = $user->insert($params);
 
-    $this->log_in($params);
-    return Request::redirect('/');
+    // $this->log_in($params);
+    // return Request::redirect('/');
   }
 }

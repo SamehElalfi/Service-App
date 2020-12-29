@@ -5,6 +5,7 @@ namespace App\Core;
 class Request
 {
   public $request = [];
+  public static $message = '';
 
   public function __construct()
   {
@@ -123,13 +124,18 @@ class Request
     return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
   }
 
-  public function back()
+  public static function back($redirect_message = null)
   {
-    $previous_url = $this->request['referer'];
-    $this->redirect($previous_url);
+    $previous_url = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : '/';
+    $instance = new static;
+    $instance::redirect($previous_url, $redirect_message);
   }
-  public static function redirect(String $path)
+
+  public static function redirect(String $path, $redirect_message = null)
   {
+    if (!is_null($redirect_message)) {
+      $_SESSION['redirect_message'][] = $redirect_message;
+    }
     header("Location: {$path}");
   }
 }

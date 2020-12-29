@@ -32,7 +32,7 @@ class LoginController extends AuthController
     $params = $request->request['post_params'];
 
     $user = new User();
-    $user_found = $user->where('email', $params['email']);
+    $user_found = $user->where('email', '=', $params['email'])->first();
 
     // Check if the username and password are correct
     if ($user_found) {
