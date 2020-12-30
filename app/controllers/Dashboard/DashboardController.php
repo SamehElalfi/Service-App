@@ -11,7 +11,7 @@ class DashboardController
   {
     // Add guard on dashboard pages
     if (!Auth::is_logged_in()) {
-      // Request::redirect('/login');
+      Request::redirect('/login');
     }
   }
 
