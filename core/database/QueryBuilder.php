@@ -45,7 +45,7 @@ class QueryBuilder extends DB
    * 
    * @var array
    */
-  private array $operators = ['=', '>', '>=', '<', '<=', 'in'];
+  private array $operators = ['=', '>', '>=', '<', '<=', 'in', 'LIKE'];
 
   /**
    * The columns will be selected in regular select statement
