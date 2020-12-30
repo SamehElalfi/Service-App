@@ -38,7 +38,7 @@ class LoginController extends AuthController
     if ($user_found) {
       if (check_bcrypt($params['password'], $user_found['password'])) {
         $this->log_in($user_found);
-        Request::redirect("/");
+        Request::redirect("/dashboard");
       }
     }
 
