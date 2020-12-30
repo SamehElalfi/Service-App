@@ -12,6 +12,22 @@ class Request
     $this->request = $this->prepare_request();
   }
 
+  public function is_ssl()
+  {
+    if (isset($_SERVER['HTTPS'])) {
+      if ('on' == strtolower($_SERVER['HTTPS'])) {
+        return true;
+      }
+
+      if ('1' == $_SERVER['HTTPS']) {
+        return true;
+      }
+    } elseif (isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT'])) {
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Parse the request into an array 
    * 
@@ -25,11 +41,13 @@ class Request
     $request['uri'] = $_SERVER['REQUEST_URI'];
 
     $auth = $this->make_request_auth();
+    $request['protocol'] = $this->is_ssl() ? 'https' : 'http';
+    // dd($_SERVER);
 
     // Full URL
     // e.g. https://username:password@localhost:8080/public/index.php?param=string&name=another-string#some-fragment
-    $request['full_url'] = $_SERVER['REQUEST_SCHEME'] . '://' .
-      $request['full_auth'] . $_SERVER['HTTP_HOST'] . $request['uri'];
+    $request['full_url'] = $request['protocol'] . '://' .
+      $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'] . $request['uri'];
 
     $parsed_url = $this->parse_request_url($request['full_url']);
 
@@ -78,14 +96,14 @@ class Request
     $request['method'] = $_SERVER['REQUEST_METHOD'];
 
     // The previous URL
-    $request['referer'] = $_SERVER['HTTP_REFERER'];
+    $request['referer'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
     // HTTP | HTTPS
     $request['protocol'] = $url['scheme'];
 
     // Authentication username and password
-    $request['user'] = $url['user'];
-    $request['pass'] = $url['pass'];
+    $request['user'] = isset($url['user']) ? $url['user'] : '';
+    $request['pass'] = isset($url['pass']) ? $url['pass'] : '';
 
     // Domain Name (e.g localhost, www.google.com)
     $request['host'] = $url['host'];
@@ -98,13 +116,10 @@ class Request
     $request['trimmed_path'] = trim($url['path'], '/');
 
     // param=string&name=another-string
-    $request['query'] = $url['query'];
+    $request['query'] = $_GET;
 
     // Full Query (e.g. ?param=string&name=another-string)
     // $request['full_query'] = "?" . $request['query'];
-
-    // some-fragment
-    $request['fragment'] = $url['fragment'];
 
     // Queries (e.g. ['param'=>'string', 'name'=>'another-string'])
     $request['get_params'] = $_GET;
