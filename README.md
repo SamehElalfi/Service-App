@@ -24,18 +24,31 @@ You can choose one of the next method to start the project:
 ### Docker
 
 This is the easiest way to start the project with no setup required. Just install docker and run this command in your terminal:
-`docker-compose up -d`
+```
+docker-compose up -d
+```
+
 Note: This command will make mysql directory inside the project. Here all your database are exist. Don't delete this directory unless you want to remove all databases with all data inside them.
 
 Then inside 'Serviceapp_web' container run this command to install all required packages:
-`composer install`
+```
+composer install
+```
+
 This is it. Now, You are ready to go.
 
 ### Setup Apache, PHP, and MySQL
 
 If you want, You can install all dependencies by yourself manually or using a tool like WAMP, LAMP, or XAMPP.
 Start you server and run this command to install all required packages:
-`composer install`
+```
+composer install
+```
+
+Now go to `./public` dir and run
+ ```
+ php -S localhost:8080
+ ```
 
 # Documentation
 
