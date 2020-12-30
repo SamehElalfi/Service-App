@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Auth;
+
 if (!function_exists('abort')) {
   /**
    * include error page
@@ -50,9 +52,11 @@ if (!function_exists('view')) {
     // Get Error message and store them in $errors
     // Then remove all error message from the session 
     // so we can add new error message
-    if (!is_null($_SESSION['redirect_message'])) {
-      $errors = array_merge($errors, $_SESSION['redirect_message']);
-      $_SESSION['redirect_message'] = null;
+    if (isset($_SESSION['redirect_message'])) {
+      if (!is_null($_SESSION['redirect_message'])) {
+        $errors = array_merge($errors, $_SESSION['redirect_message']);
+        $_SESSION['redirect_message'] = null;
+      }
     }
 
     extract($data);
@@ -94,6 +98,23 @@ if (!function_exists('component')) {
       abort(500, "component {$component} not exists.");
     else
       include($path);
+  }
+}
+
+
+
+if (!function_exists('is_admin')) {
+  /**
+   * Check if the logged in user is admin or not
+   * 
+   * @return bool
+   */
+  function is_admin()
+  {
+    if (Auth::is_logged_in()) {
+      return Auth::is_admin();
+    }
+    return false;
   }
 }
 

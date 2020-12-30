@@ -9,7 +9,7 @@ return [
   'connection' => [
     'mysql' => [
       'driver' => 'mysql',
-      'host' => env('DB_HOST', 'db'),
+      'host' => env('DB_HOST', 'db'), // add your server here
       'port' => env('DB_PORT', '3306'),
       'database' => env('DB_DATABASE', 'serviceapp_db'), // Your Database Name
       'username' => env('DB_USERNAME', 'username'), // Database Username
