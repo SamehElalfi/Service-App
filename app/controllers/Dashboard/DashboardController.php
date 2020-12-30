@@ -4,6 +4,8 @@ namespace App\Controllers\Dashboard;
 
 use App\Core\Auth;
 use App\Core\Request;
+use App\Core\Database\DB;
+use App\Models\User;
 
 class DashboardController
 {
@@ -20,8 +22,7 @@ class DashboardController
    */
   public function index()
   {
-    $totalUsers = 15;
-    $totalFreelancers = 150;
-    return view('dashboard/index', compact('totalUsers', 'totalFreelancers'));
+    $totalUsers = DB::exec("SELECT COUNT(*) FROM users")->fetch()["COUNT(*)"];
+    return view('dashboard/index', compact('totalUsers'));
   }
 }
