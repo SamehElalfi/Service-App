@@ -14,12 +14,14 @@ if (!function_exists('abort')) {
    */
   function abort($error_code, String $message = "")
   {
+    header("HTTP/1.0 {$error_code} {$message}");
     $path = VIEWS_DIR . '/errors/' . $error_code . '.php';
 
     if (file_exists($path)) {
       die(require($path));
     }
 
+    header("HTTP/1.0 500 {$message}");
     throw new \Exception("Error 500 - " . $message .
       " & page for error 500 not exists. Please, add it first.", 1);
   }
