@@ -39,6 +39,9 @@ Start you server and run this command to install all required packages:
 
 # Documentation
 
+## Connect to Database
+To connect to database add configurations in `./Config/database.php` file or make environment variables for (DB_DATABASE, DB_USERNAME, DB_PASSWORD).
+
 ## Creating new models or containers
 
 If you created any new controllers or models you need to include them first by running this command: `composer dump-autoload`

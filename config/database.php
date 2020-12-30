@@ -11,9 +11,9 @@ return [
       'driver' => 'mysql',
       'host' => env('DB_HOST', 'db'),
       'port' => env('DB_PORT', '3306'),
-      'database' => env('DB_DATABASE', 'serviceapp_db'),
-      'username' => env('DB_USERNAME', 'username'),
-      'password' => env('DB_PASSWORD', 'password'),
+      'database' => env('DB_DATABASE', 'serviceapp_db'), // Your Database Name
+      'username' => env('DB_USERNAME', 'username'), // Database Username
+      'password' => env('DB_PASSWORD', 'password'), // Database Password
       'fetch_obj' => true,
       'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
