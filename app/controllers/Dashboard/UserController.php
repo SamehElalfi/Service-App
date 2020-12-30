@@ -65,4 +65,24 @@ class UserController extends DashboardController
     $user->find($id)->delete();
     Request::redirect('/dashboard/users');
   }
+
+  public function search()
+  {
+    $request = new Request;
+    $query = $request->request['post_params']['searchQuery'];
+    $response = array("success" => true, "users" => [], "message" => "");
+
+    if ($query) {
+      $user = new User;
+      $users = $user->where('first_name', 'LIKE', "%{$query}%")->get(['id', 'first_name', 'last_name']);
+      if ($users) {
+        $response['users'] = $users;
+        echo json_encode($response);
+      } else {
+        abort(404, "Not Found");
+      }
+    } else {
+      return abort(404, "Not Found");
+    }
+  }
 }

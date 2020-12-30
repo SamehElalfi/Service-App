@@ -55,3 +55,24 @@ body {
 .btn-facebook.active {
   background-color: #0d2456 \9 !important;
 }
+
+.search-results-box {
+  color: white;
+  position: absolute;
+  background: #343a40;
+  z-index: 9;
+  width: 210px;
+  box-sizing: border-box;
+}
+.search-results-box ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.search-results-box ul li {
+  padding: 10px 0;
+}
+.search-results-box a {
+  color: white;
+  padding: 5px;
+}
