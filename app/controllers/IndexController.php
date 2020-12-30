@@ -12,29 +12,12 @@ class IndexController
   public function index()
   {
 
+    // If the user already logged in, Go to dashboard
     if (Auth::is_logged_in()) {
-      dd("I am Logged In as ", Auth::get_user());
+      return Request::redirect('/dashboard');
     }
 
-    // $user = new User();
-    // $data = $user->get(1)['email'];
-    // $first_name = 'mohammed';
-    // $last_name = 'fahmy';
-    // $email = "mohammed.fahmy@gmail.com";
-    // $password = "147258";
-
-    // // dd($data, [$data, $data], 123, false, true);
-    // $data = [
-    //   "first_name" => "Mohammed",
-    //   "last_name" => 'fahmy',
-    //   "email" => "mohammed.fahmy@gmail.com",
-    //   "password" => bcrypt("123456")
-    // ];
-    // // dd($user->insert(array_values($data)));
-    // dd($user->delete(5));
-
-    // view('index');
-    // echo "Hello from new class";
+    view('index');
   }
 
   public function scheme()
