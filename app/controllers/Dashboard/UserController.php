@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Dashboard;
 
+use App\Core\Auth;
 use App\Core\Request;
 use App\Models\User;
 
@@ -20,6 +21,7 @@ class UserController extends DashboardController
    */
   public function create()
   {
+    Auth::is_admin() ? '' : Request::redirect('/login');
     return view('dashboard/users/create');
   }
 
@@ -35,6 +37,11 @@ class UserController extends DashboardController
   {
     $user = new User;
     $user = $user->find($data['id'])->first();
+
+    // see if the user trying to edit his profile or someone's else
+    if ($user['id'] != Auth::getUser()['id']) {
+      Auth::is_admin() ? '' : Request::redirect('/login');
+    }
 
     return view('dashboard/users/edit', compact('user'));
   }
@@ -60,6 +67,8 @@ class UserController extends DashboardController
 
   public function destroy($data)
   {
+    Auth::is_admin() ? '' : Request::redirect('/login');
+
     $id = $data['id'];
     $user = new User;
     $user->find($id)->delete();
